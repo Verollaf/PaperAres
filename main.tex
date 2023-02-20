@@ -189,9 +189,20 @@ The goal of this paper is to propose a new path planning method that uses a prob
 
 \subsection{Communication}
 \colorbox{yellow}{TODO}
+The communication between all the components of the DSS can comunicate through a MQTT broker.
+MQTT or Message Queue Telemetry Transport is a featherlight and effective message protocol developed for the Internet of effects( IoT). 
+It allows bias to change data in a publish- subscribe model, where data is published by a sender and entered by one or further subscribers. The protocol is grounded on a customer- garçon armature where guests can publish or subscribe to motifs on a garçon( also known as a broker). MQTT is ideal for IoT bias because it consumes minimum bandwidth and has low above, making it able for low- authority and resource- constrained bias. 
+Its simplicity, scalability, and trustability have made it popular with inventors and has come a standard-issue protocol in the IoT assiduity.
+An MQTT broker is a intermediary mecca that acts as a communication broker between MQTT guests. It's responsible for entering, storing, and ranking dispatches between guests. When an MQTT customer publishes a communication to a special content, the broker receives the communication and forwards it to all acceded guests that are interested in that content. also, when an MQTT customer subscribes to a content, the broker stores the subscription and forwards any dispatches published on that content to the acceded customer.
+
+On the other phase, an MQTT customer is a device or operation that communicates with an MQTT broker. It can be either a publisher, subscriber, or both. When a customer publishes a communication to a special content, it sends the communication to the broker, which also on it to all acceded guests. When a customer subscribes to a content, it sends a subscription request to the broker, which stores the subscription and forwards any dispatches published on that content to the acceded customer.
+
+In summary, the MQTT broker acts as an conciliator between MQTT guests, entering and ranking dispatches, while the MQTT guests are the bias or operations that give with the broker, publishing and assenting to dispatches. Together, the MQTT broker and guests form a publish- subscribe network, allowing effective and dependable message in IoT surroundings.
+
 
 \section{Results}
 \colorbox{yellow}{TODO}
+
 
 \section{Conclusions}
 \colorbox{yellow}{TODO}
