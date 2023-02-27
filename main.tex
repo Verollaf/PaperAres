@@ -52,6 +52,7 @@
 \daterevised{ } % Comment out if no revised date
 \dateaccepted{ } 
 \datepublished{ } 
+
 %\datecorrected{} % For corrected papers: "Corrected: XXX" date in the original paper.
 %\dateretracted{} % For corrected papers: "Retracted: XXX" date in the original paper.
 \hreflink{https://doi.org/} % If needed use \linebreak
@@ -61,6 +62,7 @@
 %=================================================================
 % Add packages and commands here. The following packages are loaded in our class file: fontenc, inputenc, calc, indentfirst, fancyhdr, graphicx, epstopdf, lastpage, ifthen, float, amsmath, amssymb, lineno, setspace, enumitem, mathpazo, booktabs, titlesec, etoolbox, tabto, xcolor, colortbl, soul, multirow, microtype, tikz, totcount, changepage, attrib, upgreek, array, tabularx, pbox, ragged2e, tocloft, marginnote, marginfix, enotez, amsthm, natbib, hyperref, cleveref, scrextend, url, geometry, newfloat, caption, draftwatermark, seqsplit
 % cleveref: load \crefname definitions after \begin{document}
+\usepackage{comment}
 
 %=================================================================
 % Please use the following mathematics environments: Theorem, Lemma, Corollary, Proposition, Characterization, Property, Problem, Example, ExamplesandDefinitions, Hypothesis, Remark, Definition, Notation, Assumption
@@ -180,12 +182,57 @@ The goal of this paper is to propose a new path planning method that uses a prob
 
 \section{Method}
 \colorbox{yellow}{TODO}
+The Sum Product Algorithm (SPA) is a well-known technique in the field of probabilistic graphical models, used to efficiently calculate the marginal 
+probabilities of variables in a factor graph. In recent years, researchers have applied the SPA to the problem of path planning in robotics and autonomous vehicles. 
+The SPA can be used to compute the probability of a robot successfully reaching a destination, given the current state of the environment, such as the presence of obstacles or the 
+position of other objects. This approach allows for more efficient and accurate path planning, as it takes into account the uncertainty inherent in real-world environments. 
+By leveraging the power of probabilistic inference techniques like the SPA, researchers are making significant strides towards creating more robust and effective
+ path planning systems for a wide range of applications.
+The probabilistic frame espoused in this work is grounded on FactorGraphs( FG) that represent a unified way of rephrasing di rected and undirected probabilistic graphical models in an easy- to- manipulate forward and backward communication propagation( signal inflow). Our work on FG in reduced
+normal form( FGrn) has further simplified the FG frame reducing
+the network to interconnections of single-input single-output( SISO) blocks
+and diverters. Probabability consistence can be fluently propagated for conclusion
+and literacy. Seminal work on FG can be set up in and; some details
+on the optimized executions of FGrn can be set up in. 
+
+ \begin{figure}[H]
+	\includegraphics[width=10.5 cm]{res/FGnr.png}
+	\caption{Factor graph in normal reduced form}
+\end{figure}
+
+\begin{equation}
+	\begin{array}{l}
+	f_{(S_tA_t)^1}(s_ta_t)=\sum_{s_{t-1}a_{t-1}} p(s_t a_t|s_{t-1} a_{t-1}) 
+	f_{(S_{t-1}A_{t-1})^3}(s_{t-1}a_{t-1}) ;\\
+	b_{(S_{t-1}A_{t-1})^3}(s_{t-1}a_{t-1})\propto \sum_{s_t a_t} p(s_t a_t|s_{t-1}a_{t-1}) b_{(S_tA_t)^1}(s_ta_t);\\
+	 f_{(S_tA_t)^2}(s_ta_t)= c_t(s_ta_t);\\
+	b_{(S_tA_t)^2}(s_ta_t) \propto b_{(S_tA_t)^3}(s_ta_t) f_{(S_tA_t)^1}(s_ta_t); \\
+	b_{(S_tA_t)^1}(s_ta_t) \propto f_{(S_tA_t)^2}(s_ta_t) b_{(S_tA_t)^3}(s_ta_t) ;\\
+	f_{(S_tA_t)^3}(s_ta_t) \propto f_{(S_tA_t)^1}(s_ta_t) f_{(S_tA_t)^2}(s_ta_t).
+	\end{array}
+	\label{eq:prop}
+	\end{equation} 
+
+
+
+
 
 \subsection{Input data}
 \colorbox{yellow}{TODO}
+The developed module takes as input several sets of data divided into:
+\begin{itemize}
+\item Data for the construction of the parameterized map: wave motion (significant height, direction, period, etc.), 
+	weather conditions (temperature, wind at 10 meters, marine pressure, rain, etc.);
+\item Mission data: mission objectives, Cobalt start and goal positions, drone release positions(Intermediate positions), 
+	mission duration, etc.;
+\end{itemize}
 
 \subsection{Algorithm}
 \colorbox{yellow}{TODO}
+
+
+
+ 
 
 \subsection{Communication}
 \colorbox{yellow}{TODO}
@@ -466,32 +513,333 @@ All appendix sections must be cited in the main text. In the appendices, Figures
 %=====================================
 % References, variant B: internal bibliography
 %=====================================
-\begin{thebibliography}{999}
-% Reference 1
-\bibitem[Author1(year)]{ref-journal}
-Author~1, T. The title of the cited article. {\em Journal Abbreviation} {\bf 2008}, {\em 10}, 142--149.
-% Reference 2
-\bibitem[Author2(year)]{ref-book1}
-Author~2, L. The title of the cited contribution. In {\em The Book Title}; Editor 1, F., Editor 2, A., Eds.; Publishing House: City, Country, 2007; pp. 32--58.
-% Reference 3
-\bibitem[Author3(year)]{ref-book2}
-Author 1, A.; Author 2, B. \textit{Book Title}, 3rd ed.; Publisher: Publisher Location, Country, 2008; pp. 154--196.
-% Reference 4
-\bibitem[Author4(year)]{ref-unpublish}
-Author 1, A.B.; Author 2, C. Title of Unpublished Work. \textit{Abbreviated Journal Name} year, \textit{phrase indicating stage of publication (submitted; accepted; in press)}.
-% Reference 5
-\bibitem[Author5(year)]{ref-communication}
-Author 1, A.B. (University, City, State, Country); Author 2, C. (Institute, City, State, Country). Personal communication, 2012.
-% Reference 6
-\bibitem[Author6(year)]{ref-proceeding}
-Author 1, A.B.; Author 2, C.D.; Author 3, E.F. Title of presentation. In Proceedings of the Name of the Conference, Location of Conference, Country, Date of Conference (Day Month Year); Abstract Number (optional), Pagination (optional).
-% Reference 7
-\bibitem[Author7(year)]{ref-thesis}
-Author 1, A.B. Title of Thesis. Level of Thesis, Degree-Granting University, Location of University, Date of Completion.
-% Reference 8
-\bibitem[Author8(year)]{ref-url}
-Title of Site. Available online: URL (accessed on Day Month Year).
-\end{thebibliography}
+\begin{thebibliography}{10}
+	\expandafter\ifx\csname url\endcsname\relax
+	  \def\url#1{\texttt{#1}}\fi
+	\expandafter\ifx\csname urlprefix\endcsname\relax\def\urlprefix{URL }\fi
+	\expandafter\ifx\csname href\endcsname\relax
+	  \def\href#1#2{#2} \def\path#1{#1}\fi
+	
+	\bibitem{CosciaFusion2018}
+	P.~{Coscia}, F.~A. {N. Palmieri}, P.~{Braca}, L.~M. {Millefiori}, P.~{Willett},
+	  Unsupervised maritime traffic graph learning with mean-reverting stochastic
+	  processes, in: 2018 21st International Conference on Information Fusion
+	  (FUSION), 2018, pp. 1822--1828.
+	
+	\bibitem{CosciaIEEE2018}
+	P.~Coscia, P.~Braca, L.~M. Millefiori, F.~A.~N. Palmieri, P.~K. Willett,
+	  Multiple ornstein-uhlenbeck processes for maritime traffic graph
+	  representation, IEEE Transactions on Aerospace and Electronic Systems 54
+	  (2018) 2158--2170.
+	\newblock \href {https://doi.org/10.1109/TAES.2018.2808098}
+	  {\path{doi:10.1109/TAES.2018.2808098}}.
+	
+	\bibitem{coscia2020}
+	P.~Coscia, L.~Ballan, F.~Palmieri, A.~Alahi, S.~Savarese, Linear Artificial
+	  Forces for Human Dynamics in Complex Contexts, Vol. 151, Springer Singapore,
+	  2020, Ch.~2, pp. 21--33.
+	\newblock \href {https://doi.org/doi.org/10.1007/978-981-13-8950-4\_3}
+	  {\path{doi:doi.org/10.1007/978-981-13-8950-4\_3}}.
+	
+	\bibitem{CosciaIVC2018}
+	P.~Coscia, F.~Castaldo, F.~A.~N. Palmieri, A.~Alahi, S.~Savarese, L.~Ballan,
+	  Long-term path prediction in urban scenarios using circular distributions,
+	  Image and Vision Computing 69 (2018) 81--91, (Editors Choice Award 2021).
+	\newblock \href {https://doi.org/doi.org/10.1016/j.imavis.2017.11.006}
+	  {\path{doi:doi.org/10.1016/j.imavis.2017.11.006}}.
+	
+	\bibitem{CosciaFusion2016}
+	P.~Coscia, F.~Castaldo, F.~A.~N. Palmieri, L.~Ballan, A.~Alahi, S.~Savarese,
+	  Point-based path prediction from polar histograms, in: Proceedings of the
+	  19th International Conference on Information Fusion (FUSION 2016), 2016, pp.
+	  1961--1967.
+	
+	\bibitem{CastaldoWirn2014}
+	F.~Castaldo, F.~Palmieri, C.~Regazzoni, Application of Bayesian Techniques to
+	  Behavior Analysis in Maritime Environments, Vol.~37, Springer, Cham, 2014,
+	  Ch.~5, pp. 175--183.
+	\newblock \href {https://doi.org/doi.org/10.1007/978-3-319-18164-6\_17}
+	  {\path{doi:doi.org/10.1007/978-3-319-18164-6\_17}}.
+	
+	\bibitem{Loeliger2004}
+	H.~A. Loeliger, An introduction to factor graphs, IEEE Signal Processing
+	  Magazine 21~(1) (2004) 28 -- 41.
+	
+	\bibitem{Palmieri2016}
+	F.~A.~N. Palmieri, A comparison of algorithms for learning hidden variables in
+	  bayesian factor graphs in reduced normal form, IEEE Transactions on Neural
+	  Networks and Learning Systems 27~(11) (2016) 2242--2255.
+	
+	\bibitem{Loeliger2007a}
+	H.~A. Loeliger, J.~Dauwels, J.~Hu, S.~Korl, P.~Li, F.~Kschischang, The factor
+	  graph approach to model-based signal processing, Proceedings of the IEEE
+	  95~(6) (2007) 1295 --1322.
+	
+	\bibitem{DiGennaro2021}
+	G.~Di~Gennaro, A.~Buonanno, F.~A.~N. Palmieri, Optimized realization of
+	  bayesian networks in reduced normal form using latent variable model, Soft
+	  Computing 25 (2021) 7029–7040.
+	
+	\bibitem{Buonanno2015b}
+	A.~Buonanno, F.~A.~N. Palmieri, Two-dimensional multi-layer factor graphs in
+	  reduced normal form, in: Proceedings of the International Joint Conference on
+	  Neural Networks, IJCNN2015, July 12-17, 2015, Killarney, Ireland, 2015.
+	
+	\bibitem{Attias2003}
+	H.~Attias, Planning by probabilistic inference, in: Proc. of the 9th Int.
+	  Workshop on Artificial Intelligence and Statistics, 2003, p.~.
+	
+	\bibitem{bertsekas2019control}
+	D.~P. Bertsekas, Reinforcement Learning and Optimal Control, Athena Scientific,
+	  2019.
+	
+	\bibitem{Touissaint2006}
+	M.~Toussaint, A.~Storkey, Probabilistic inference for solving discrete and
+	  continuous state markov decision processes, Proceedings of the 23rd
+	  International Conference on Machine Learning 2006 (2006) 945--952.
+	\newblock \href {https://doi.org/10.1145/1143844.1143963}
+	  {\path{doi:10.1145/1143844.1143963}}.
+	
+	\bibitem{Toussaint2009}
+	M.~Toussaint, Probabilistic inference as a model of planned behavior,
+	  Kunstliche Intelligenz 3 (01 2009).
+	
+	\bibitem{Todorov2009}
+	E.~Todorov, Efficient computation of optimal actions, Proceedings of the
+	  National Academy of Sciences 106~(28) (2009) 11478--11483.
+	
+	\bibitem{Kappen2013}
+	H.~Kappen, V.~Gomez, M.~Opper, Optimal control as a graphical model inference
+	  problem, in: Proceedings of the Twenty-Third International Conference on
+	  Automated Planning and Scheduling, 2013.
+	
+	\bibitem{Ortega2013}
+	P.~A. Ortega, D.~A. Braun, Thermodynamics as a theory of decision-making with
+	  information-processing costs, Proceedings of the Royal Society A (May 2013).
+	
+	\bibitem{Levine2018}
+	S.~Levine, Reinforcement learning and control as probabilistic inference:
+	  Tutorial and review, arXiv:1805.00909v3 [cs.LG] 20 May 2018 (2018).
+	
+	\bibitem{Buckley2017}
+	C.~L. Buckley, C.~S. Kim, S.~McGregor, A.~K. Seth, The free energy principle
+	  for action and perception: a mathematica review, Journal of Mathematica
+	  Phychology 81 (2017) 55--79.
+	
+	\bibitem{Parr2018}
+	T.~Parr, K.~J. Friston, Generalised free energy and active inference: can the
+	  future cause the past?, BioARXIV (2018).
+	\newblock \href {https://doi.org/10.1101/304782} {\path{doi:10.1101/304782}}.
+	
+	\bibitem{Baltieri2017}
+	M.~Baltieri, C.~L. Buckley, An active inference implementation of phototaxis,
+	  ARXIV (2017).
+	
+	\bibitem{Zenon2018}
+	Z.~Alexandre, S.~Oleg, P.~Giovanni, An information-theoretic perspective on the
+	  costs of cognition, Neuropsychologia 123 (2018) 5--18.
+	\newblock \href {https://doi.org/10.1016/j.neuropsychologia.2018.09.013}
+	  {\path{doi:10.1016/j.neuropsychologia.2018.09.013}}.
+	
+	\bibitem{ParrFrontiers2018}
+	T.~Parr, K.~J. Friston, The anatomy of inference: Generative models and brain
+	  structure, Frontiers in Computational Neuroscience 12 (2018).
+	\newblock \href {https://doi.org/10.3389/fncom.2018.00090}
+	  {\path{doi:10.3389/fncom.2018.00090}}.
+	
+	\bibitem{Kaplan2018}
+	R.~Kaplan, K.~J. Friston, Planning and navigation as active inference,
+	  Biological Cybernetics 112 (2018) 323--347.
+	\newblock \href {https://doi.org/10.1007/s00422-018-0753-2}
+	  {\path{doi:10.1007/s00422-018-0753-2}}.
+	
+	\bibitem{NairSavareseetal2019}
+	S.~Nair, Y.~Zhu, S.~Savarese, F.-F. Li, Causal induction from visual
+	  observations for goal directed tasks, arXiv:1910.01751v1 [cs.LG] 3 Oct 2019
+	  (2019).
+	
+	\bibitem{palmieri2021unified}
+	F.~A.~N. Palmieri, K.~R. Pattipati, G.~D. Gennaro, G.~Fioretti, F.~Verolla,
+	  A.~Buonanno, A unifying view of estimation and control using belief
+	  propagation with application to path planning, IEEE Access 10 (2022)
+	  15193--15216.
+	\newblock \href {https://doi.org/10.1109/ACCESS.2022.3148127}
+	  {\path{doi:10.1109/ACCESS.2022.3148127}}.
+	
+	\bibitem{palmieri2020path}
+	F.~A.~N. Palmieri, K.~R. Pattipati, G.~Fioretti, G.~Di~Gennaro, A.~Buonanno,
+	  {Path Planning Using Probability Tensor Flows}, IEEE Aerospace and Electronic
+	  Systems Magazine 36~(1), preliminary version on arXiv:2003.02774. (Jan.
+	  2021).
+	
+	\bibitem{gasparetto2015pathplanning}
+	A.~Gasparetto, P.~Boscariol, A.~Lanzutti, R.~Vidoni, Path planning and
+	  trajectory planning algorithms: A general overview, Mechanisms and Machine
+	  Science 29 (2015) 3--27.
+	\newblock \href {https://doi.org/10.1007/978-3-319-14705-5\_1}
+	  {\path{doi:10.1007/978-3-319-14705-5\_1}}.
+	
+	\bibitem{micromouse2013law}
+	G.~Law, Quantitative comparison of flood fill and modified flood fill
+	  algorithms, International Journal of Computer Theory and Engineering (2013)
+	  503--508\href {https://doi.org/10.7763/IJCTE.2013.V5.738}
+	  {\path{doi:10.7763/IJCTE.2013.V5.738}}.
+	
+	\bibitem{maze2017Tjiharjadi}
+	S.~Tjiharjadi, M.~Wijaya, E.~Setiawan, Optimization maze robot using a* and
+	  flood fill algorithm, International Journal of Mechanical Engineering and
+	  Robotics Research 6 (2017) 366--372.
+	\newblock \href {https://doi.org/10.18178/ijmerr.6.5.366-372}
+	  {\path{doi:10.18178/ijmerr.6.5.366-372}}.
+	
+	\bibitem{lozano1979planning}
+	T.~Lozano-P\'{e}rez, M.~A. Wesley, An algorithm for planning collision-free
+	  paths among polyhedral obstacles, Commun. ACM 22~(10) (1979) 560–570.
+	\newblock \href {https://doi.org/10.1145/359156.359164}
+	  {\path{doi:10.1145/359156.359164}}.
+	
+	\bibitem{lozano1983space}
+	T.~Lozano-Perez, Spatial planning: A configuration space approach, IEEE
+	  Transactions on Computers C-32~(2) (1983) 108--120.
+	
+	\bibitem{canny1987voronoi}
+	J.~Canny, B.~Donald, Simplified voronoi diagrams, Tech. rep., Massachusetts
+	  Institute of Technology, USA (1987).
+	
+	\bibitem{takahashi1989motion}
+	O.~{Takahashi}, R.~J. {Schilling}, Motion planning in a plane using generalized
+	  voronoi diagrams, IEEE Transactions on Robotics and Automation 5~(2) (1989)
+	  143--150.
+	
+	\bibitem{abbadi2015path}
+	A.~Abbadi, V.~Prenosil, Collided path replanning in dynamic environments using
+	  rrt and cell decomposition algorithms, in: Modelling and Simulation for
+	  Autonomous Systems, Vol. 9055, 2015, pp. 131--143.
+	\newblock \href {https://doi.org/10.1007/978-3-319-22383-4\_9}
+	  {\path{doi:10.1007/978-3-319-22383-4\_9}}.
+	
+	\bibitem{abbadi2015planning}
+	A.~Abbadi, V.~Prenosil, Safe path planning using cell decomposition
+	  approximation, in: International Conference on Distance Learning, Simulation
+	  and Communication, 2015, pp. 8--14.
+	
+	\bibitem{potential1992hwang}
+	Y.~K. {Hwang}, N.~{Ahuja}, A potential field approach to path planning, IEEE
+	  Transactions on Robotics and Automation 8~(1) (1992) 23--32.
+	
+	\bibitem{potential2016sabudin}
+	S.~elia nadira, R.~Omar, C.~K.~N. Hailma, Potential field methods and their
+	  inherent approaches for path planning 11 (2016) 10801--10805.
+	
+	\bibitem{potential2020yao}
+	Q.~{Yao}, Z.~{Zheng}, L.~{Qi}, H.~{Yuan}, X.~{Guo}, M.~{Zhao}, Z.~{Liu},
+	  T.~{Yang}, Path planning method with improved artificial potential field—a
+	  reinforcement learning perspective, IEEE Access 8 (2020) 135513--135523.
+	
+	\bibitem{amato1996planning}
+	N.~M. {Amato}, Y.~{Wu}, A randomized roadmap method for path and manipulation
+	  planning, in: Proceedings of IEEE International Conference on Robotics and
+	  Automation, Vol.~1, 1996, pp. 113--120 vol.1.
+	
+	\bibitem{nissoux1999roadmaps}
+	C.~{Nissoux}, T.~{Simeon}, J.~. {Laumond}, Visibility based probabilistic
+	  roadmaps, in: Proceedings 1999 IEEE/RSJ International Conference on
+	  Intelligent Robots and Systems. Human and Environment Friendly Robots with
+	  High Intelligence and Emotional Quotients (Cat. No.99CH36289), Vol.~3, 1999,
+	  pp. 1316--1321 vol.3.
+	
+	\bibitem{Lavalle98exploringrandom}
+	S.~M. Lavalle, Rapidly-exploring random trees: A new tool for path planning,
+	  The annual research report (1998).
+	
+	\bibitem{Hart68}
+	P.~E. Hart, N.~J. Nilsson, B.~Raphael, A formal basis for the heuristic
+	  determination of minimum cost paths, IEEE Transactions on Systems Science and
+	  Cybernetics 4~(2) (1968) 100--107.
+	\newblock \href {https://doi.org/10.1109/TSSC.1968.300136}
+	  {\path{doi:10.1109/TSSC.1968.300136}}.
+	
+	\bibitem{Stentz93}
+	A.~Stentz, Optimal and efficient path planning for unknown and dynamic
+	  environments, INTERNATIONAL JOURNAL OF ROBOTICS AND AUTOMATION 10 (1993)
+	  89--100.
+	
+	\bibitem{Koenig2005}
+	S.~Koenig, M.~Likhachev, \href{https://doi.org/10.1109/TRO.2004.838026}{Fast
+	  replanning for navigation in unknown terrain}, Trans. Rob. 21~(3) (2005)
+	  354–363.
+	\newblock \href {https://doi.org/10.1109/TRO.2004.838026}
+	  {\path{doi:10.1109/TRO.2004.838026}}.
+	\newline\urlprefix\url{https://doi.org/10.1109/TRO.2004.838026}
+	
+	\bibitem{Choset2005}
+	H.~Choset, K.~Lynch, S.~Hutchinson, G.~Kantor, W.~Burgard, L.~Kavraki,
+	  S.~Thrun, Principles of Robot Motion: Theory, Algorithms, and
+	  Implementations, MIT Press, 2005.
+	
+	\bibitem{Everett2019}
+	M.~Everett, J.~Miller, J.~How, Planning beyond the sensing horizon using a
+	  learned context, 2019 IEEE/RSJ International Conference on Intelligent Robots
+	  and Systems (IROS) (2019) 1064--1071.
+	
+	\bibitem{Niroui2017}
+	F.~Niroui, B.~Sprenger, G.~Nejat, Robot exploration in unknown cluttered
+	  environments when dealing with uncertainty, in: 2017 IEEE International
+	  Symposium on Robotics and Intelligent Sensors (IRIS), 2017, pp. 224--229.
+	\newblock \href {https://doi.org/10.1109/IRIS.2017.8250126}
+	  {\path{doi:10.1109/IRIS.2017.8250126}}.
+	
+	\bibitem{Yamauchi1997}
+	B.~Yamauchi, A frontier-based approach for autonomous exploration, in:
+	  Proceedings of the 1997 IEEE International Symposium on Computational
+	  Intelligence in Robotics and Automation, CIRA '97, IEEE Computer Society,
+	  USA, 1997, p. 146.
+	
+	\bibitem{Naghizadeh2020}
+	A.~Naghizadeh, S.~Berenjian, D.~J. Margolis, D.~N. Metaxas, Gnm: Gridcell
+	  navigational model, Expert Systems with Applications 148 (2020) 113217.
+	\newblock \href {https://doi.org/https://doi.org/10.1016/j.eswa.2020.113217}
+	  {\path{doi:https://doi.org/10.1016/j.eswa.2020.113217}}.
+	
+	\bibitem{Zhu2011}
+	Q.~Zhu, J.~Hu, W.~Cai, L.~Henschen, A new robot navigation algorithm for
+	  dynamic unknown environments based on dynamic path re-computation and an
+	  improved scout ant algorithm, Applied Soft Computing 11~(8) (2011)
+	  4667--4676.
+	\newblock \href {https://doi.org/https://doi.org/10.1016/j.asoc.2011.07.016}
+	  {\path{doi:https://doi.org/10.1016/j.asoc.2011.07.016}}.
+	
+	\bibitem{Santos2020}
+	V.~Santos, F.~E. Otero, C.~G. Johnson, F.~Osorio, C.~Toledo, Exploratory path
+	  planning for mobile robots in dynamic environments with ant colony
+	  optimization, in: Genetic and Evolutionary Computation Conference (GECCO
+	  '20), ACM, 2020.
+	\newblock \href {https://doi.org/https://doi.org/10.1145/3377930.3390219}
+	  {\path{doi:https://doi.org/10.1145/3377930.3390219}}.
+	
+	\bibitem{PalmieriICRA2020}
+	F.~A.~N. Palmieri, K.~R. Pattipati, G.~Fioretti, F.~Verolla, G.~Di~Gennaro,
+	  A.~Buonanno, Exploration/exploitation in path planning using probability
+	  propagation, in: Proceeding of the IEEE Intermational Conference on Robotics
+	  and Automation (ICRA 2020), 2nd Workshop on Long-Term Human Motion Prediction
+	  (LHMP), 2020.
+	
+	\bibitem{Buonanno2015a}
+	A.~Buonanno, F.~Palmieri, Simulink implementation of belief propagation in
+	  normal factor graphs, Smart Innovation, Systems and Technologies 37 (2015)
+	  11--20.
+	
+	\bibitem{DiGennaro2022}
+	G.~Di~Gennaro, A.~Buonanno, G.~Fioretti, F.~Verolla, K.~R. Pattipati, F.~A.~N.
+	  Palmieri, Probabilistic inference and dynamic programming: A unified approach
+	  to multi-agent autonomous coordination in complex and uncertain environments,
+	  Frontiers in Physics 10 (2022).
+	\newblock \href {https://doi.org/10.3389/fphy.2022.944157}
+	  {\path{doi:10.3389/fphy.2022.944157}}.
+	
+	\end{thebibliography}
+	
+
 
 % If authors have biography, please use the format below
 %\section*{Short Biography of Authors}
