@@ -61,8 +61,7 @@
 %=================================================================
 % Add packages and commands here. The following packages are loaded in our class file: fontenc, inputenc, calc, indentfirst, fancyhdr, graphicx, epstopdf, lastpage, ifthen, float, amsmath, amssymb, lineno, setspace, enumitem, mathpazo, booktabs, titlesec, etoolbox, tabto, xcolor, colortbl, soul, multirow, microtype, tikz, totcount, changepage, attrib, upgreek, array, tabularx, pbox, ragged2e, tocloft, marginnote, marginfix, enotez, amsthm, natbib, hyperref, cleveref, scrextend, url, geometry, newfloat, caption, draftwatermark, seqsplit
 % cleveref: load \crefname definitions after \begin{document}
-\usepackage{caption}
-\usepackage{subcaption}
+
 %=================================================================
 % Please use the following mathematics environments: Theorem, Lemma, Corollary, Proposition, Characterization, Property, Problem, Example, ExamplesandDefinitions, Hypothesis, Remark, Definition, Notation, Assumption
 %% For proofs, please use the proof environment (the amsthm package is loaded by the MDPI class).
@@ -79,23 +78,21 @@
 %\newcommand{\orcidauthorB}{0000-0000-0000-000X} % Add \orcidB{} behind the author's name
 
 % Authors, for the paper (add full first names)
-\Author{Gianluca Massei $^{1,\dagger,\ddagger}$\orcidA{}, Giovanni Fioretti $^{2,\ddagger}$, Francesco A.N. Palmieri $^{2}$ $^{2,}$*,Francesco Verolla $^{2}$, Giovannio Di Gennaro$^{2}$ and Amedeo Buonanno $^{3}$}
+\Author{Gianluca Massei $^{1,\dagger,\ddagger}$\orcidA{}, Giovanni Fioretti $^{2,\ddagger}$, Francesco Verolla $^{2}$ and Francesco A.N. Palmieri $^{2}$ $^{2,}$*}
 
 %\longauthorlist{yes}
 
 % MDPI internal command: Authors, for metadata in PDF
-\AuthorNames{Gianluca Massei, Giovanni Fioretti , Francesco A.N. Palmieri, Giovanni Di Gennaro, Francesco Verolla and Amedeo Buonanno}
+\AuthorNames{Gianluca Massei, Giovanni Fioretti and Francesco A.N. Palmieri}
 
 % MDPI internal command: Authors, for citation in the left column
-\AuthorCitation{Massei, G.; Fioretti, G.; Verolla, F.; Palmieri, F., A.N., Di Gennaro, G. and Buonanno, A.}
+\AuthorCitation{Massei, G.; Fioretti, G.; Verolla, F.; Palmieri, F., A.N.}
 % If this is a Chicago style journal: Lastname, Firstname, Firstname Lastname, and Firstname Lastname.
 
 % Affiliations / Addresses (Add [1] after \address if there is only one affiliation.)
 \address{%
 $^{1}$ \quad CNIT\\
-$^{2}$ \quad University of Campania Luigi Vanvitelli\\
-$^{3}$ \quad ENEA\\
-}
+$^{2}$ \quad University of Campania Luigi Vanvitelli}
 
 % Contact information of the corresponding author
 \corres{Correspondence: gianluca.massei@cnit.it; Tel.: (optional; include country code; if there are multiple corresponding authors, add author initials) +xx-xxxx-xxx-xxxx (F.L.)}
@@ -211,7 +208,7 @@ on the optimized executions of FGrn can be set up in.
 	\includegraphics[width=10.5 cm]{res/FGnr.png}
 	\caption{Factor graph in normal reduced form}
 \end{figure}
-\colorbox{yellow}{Mettere le eq nella forma del paper --Rimuovere array}
+
 \begin{equation}
 	\begin{array}{l}
 	f_{(S_tA_t)^1}(s_ta_t)=\sum_{s_{t-1}a_{t-1}} p(s_t a_t|s_{t-1} a_{t-1}) 
@@ -230,91 +227,20 @@ where the simbol $\propto$ means ``proportional to'' because  only some messages
 p_{(S_tA_t)^i}(s_ta_t) \propto  b_{(S_tA_t)^i}(s_ta_t) f_{(S_tA_t)^i}(s_ta_t), ~~~t=1,...,T; ~~i=1,2,3. 
 \label{eq:post}
 \end{equation}
-\colorbox{red}{COME CITO IL PAPER SULLA LIMITED VIEW? Queste cose sono prese da la}\\
-In our work, we consider a discrete environment of size $N\times M$ and the considered agent can move in eight directions: up, down, left, right, and the four diagonal directions.
-Using a discrete representation of the environment, each cell of the grid, that rapresent the possible states of the agent, can be associated with a variable $r_{i,j}$ (Reward), 
-where $i$ and $j$ are the row and column indices of the cell, respectively. The value of $r_{i,j}$ is 1 if the cell is occupied and 0 if the cell is completly free of obstacles or 
-a value between 0 and 1 whereever there is an higher or lower preference to move in that cell. The agent can move from one cell to another only if the destination cell is free.\\
+\colorbox{red}{COME CITO IL PAPER SULLA LIMITED VIEW? Queste cose sono prese da la}
 
-The reward function $r_{i,j}$ is a function of the current state of the environment, and it is assumed to be known to the agent. 
-This function has been obtained by modeling the input dataset and it will be discussed in the next section.\\
+\colorbox{yellow}{TODO}
 
 \subsection{Input data}
 The developed module takes as input several sets of data divided into:
 \begin{itemize}
-\item Data for the construction of the parameterized map: wave motion 
+\item Data for the construction of the parameterized map: wave motion (significant height, direction, period, etc.), 
+	weather conditions (temperature, wind at 10 meters, marine pressure, rain, etc.);
 \item Mission data: mission objectives, \colorbox{green}{NG Worker} start and goal positions, drone release positions(Intermediate positions), 
 	mission duration, etc.;
 \end{itemize}
-
 All the weather data are provided by the \colorbox{green}{PARTHENOPE\footnote[2]{http://193.205.230.6:8080/opendap/hyrax/}}. The data are provided in the form of a netCDF file,
-which is a self-describing file format that allows the storage of multidimensional arrays of scientific data and they are used to store both the map and the reward function.
-As input data for the construction of the reward function, the following parameters are considered:
-\begin{itemize}
-\item Significant height of wind and swell waves(see figure \ref*{fig:waveHeight}).
-\item Peak direction(see figure \ref*{fig:pDir}).
-\item Costal map(see figure \ref*{fig:coast}).
-\end{itemize}
-
-The signficant height of the waves information has been used to get the informations about the Sea State.The term Sea State describes the general condition of the surface of the open sea. 
-This is comprised of two core measurements, the wave height which is dependent on the local surface wind strength and thus termed the ‘wind sea’ and the swell which i
-s a slow and regular movement of the sea in rolling waves that do not break and are in the process of dissipating as they travel from their relatively distant origin.\\
-The sea state is described by the following chart: \\
-
-\newcolumntype{C}{>{\centering\arraybackslash}X}
-\begin{tabularx}{\textwidth}{CCC}
-\toprule
-\textbf{Code}	& \textbf{Heigt [m]}	& \textbf{Description}\\
-\midrule
-0		& no wave			& Calm (Glassy)\\
-1		& 0 - 0.10			& Calm (Rippled) \\
-2		& 0.10 - 0.50			& Smooth (Wavelets) \\
-3		& 0.50 - 1.25			& Slight \\
-4		& 1.25 - 2.50			& Moderate \\
-5		& 2.50 - 4.00			& Rough \\
-6		& 4.00 - 6.00			& Very Rough\\
-7		& 6.00 - 9.00			&  High\\
-8		& 9.00 - 14.00			& Very High \\
-9		& 14.00+			& Phenomenal \\
-
-\bottomrule
-\end{tabularx}
-
-Those informations are trasformed in a probabilistic fashion using values from 0 to 1, where 0 means sea state 0 and 1 sea state greater or equale to 4.\\
-Sea state greater then 4 are considered as the same because the considered agent (NG Worker) is not able to operate in those conditions.\\
-\colorbox{red}{SPIEGARE DELLA SCELTA DI INCLUDERE VALORI FINO A SS 4}
-The costal map is a binary map where 1 represents the presence of a coast and 0 the absence of a coast. This map has been processed applying a Gaussian filter to the original map 
-to create a smooth transition between the coast and the sea to create different zones to avoiding collisions of the results path with the coast as shown in figure \ref*{fig:coastBlur}.\\
-\begin{figure}[h]
-	\begin{subfigure}{0.5\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{res/imgs/waveHeight.png}
-		\caption{Wave height}
-		\label{fig:waveHeight}
-	\end{subfigure}
-	\begin{subfigure}{0.5\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{res/imgs/peakDir.png}
-		\caption{Peak direction}
-		\label{fig:pDir}
-	\end{subfigure}
-\end{figure}
-\begin{figure}[h]
-	\begin{subfigure}{0.5\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{res/imgs/coast.png}
-		\caption{Costal map}
-		\label{fig:coast}
-	\end{subfigure}
-	\begin{subfigure}{0.5\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{res/imgs/coastBlur.png}
-		\caption{Costal map smoothed}
-		\label{fig:coastBlur}
-	\end{subfigure}
-\end{figure}
-
-The reward function is obtained by combining the three parameters in a weighted sum and then normalizing the result in the range [0,1].\\
+which is a self-describing file format that allows the storage of multidimensional arrays of scientific data.
 
 \colorbox{yellow}{TODO}
 
