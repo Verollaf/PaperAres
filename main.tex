@@ -63,6 +63,8 @@
 % cleveref: load \crefname definitions after \begin{document}
 \usepackage{caption}
 \usepackage{subcaption}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
 %=================================================================
 % Please use the following mathematics environments: Theorem, Lemma, Corollary, Proposition, Characterization, Property, Problem, Example, ExamplesandDefinitions, Hypothesis, Remark, Definition, Notation, Assumption
 %% For proofs, please use the proof environment (the amsthm package is loaded by the MDPI class).
@@ -186,11 +188,36 @@ The method will be compared to some state-of-the-art techniques too.
 \colorbox{yellow}{TODO}
 
 \subsection{WiP}
-The Leader Algorithm is a probabilistic and continuous path planning algorithm. A discrete and deterministic version has been created for those applications where the probability map does not have a high resolution and for which the execution speed is fundamental. The algorithm continues to be online.
 
-Similarly to the case of particles, we speak here of \textit {leader cell}. All the basic mechanisms previously described remain valid: the leader cell is the one with the highest value in the entire workspace; at each iteration of the algorithm only the leader cell is diffused; the new cell is stored only if the new value is higher than the old one; the stopping criterion occurs when the leader cell and the start cell correspond.
+The path planning problem involves dealing with uncertain issues that affect from the actions taken by an agent. One expressway to accessibly represent and solve those kind of proglem is by utilizing 
+a fine model called a Markov Decision Process(MDP). 
+An MDP is outlined by a tuple  $\{T, \mathcal{S}, \mathcal{A}, p, r\}$, where $T$ is the time horizon, $\mathcal{S}$ a set of all possible states,
+ $\mathcal{A}$ a set of all possible actions, $p$ is the state transition function and $r$ is the reward function.
 
-A $3 \times 3$ kernel centered on the leader cell is used for the diffusion process. All actions have a priority of $1$. Furthermore, the outcome of a given action is certain. In any case, the current implementation does not prohibit being able to condition these two characteristics.
+In our work, we consider a discrete environment of size $N\times M$ and the considered agent can move in eight directions ($a_t$): up, down, left, right, and the four diagonal directions.
+Using a discrete representation of the environment, each cell of the grid, that rapresent the possible states of the agent, can be associated with a variable $r(s_t, a_t)$ (Reward).
+ The value of $r(s_t, a_t)$ is 1 if the cell is occupied and 0 if the cell is completly free of obstacles or 
+a value between 0 and 1 whereever there is an higher or lower preference to move in that cell. This reward function guides the agent towards the optimal solution. 
+For instance, for each time step $t$, the agent can be in a cell $s_t\in \mathcal{S}$ and can perform an action $a_t \in \mathcal{A}$ to move to a new state $s_{t+1}$ and it recive a reward 
+$r(s_t, a_t) \in \mathcal{R}$.
+The MDP based on state-action model can be rapresentated as a Bayseas Graph as shown in Figure \ref{fig:MDP}.
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.7\textwidth]{res/imgs/Mdp.png}
+	\caption{MDP}
+	\label{fig:MDP}
+\end{figure}
+
+
+
+Our own algorithm is called \textit{Leader Algorithm} and it is based on the \textit{Leader-Follower} paradigm. It's a discrete and deterministic version of the Leader Algorithm outlined 
+in \cite{}.\\
+ 
+We will speak  of \textit {leader cell}. 
+
+A $3 \times 3$ kernel centered on the leader cell is used for the diffusion process. All actions have a priority of $1$. 
+Furthermore, the outcome of a given action is certain. In any case, the current implementation does not prohibit being able to condition these two characteristics.
 
 A cell is updated as follows:
 \begin{equation*}\label{eq:weight_update_disc}
@@ -203,43 +230,13 @@ where $\nu_i$ is the value  of the new cell $i$, $\nu(\mathcal{L}_i)$ is the val
 \colorbox{yellow}{TODO}
 
 
-\section{Method}
-%The Sum Product Algorithm (SPA) is a well-known technique in the field of probabilistic graphical models, used to efficiently calculate the marginal probabilities of variables in a factor graph. In recent years, researchers have applied the SPA to the problem of path planning in robotics and autonomous vehicles.  The SPA can be used to compute the probability of a robot successfully reaching a destination, given the current state of the environment, such as the presence of obstacles or the position of other objects. This approach allows for more efficient and accurate path planning, as it takes into account the uncertainty inherent in real-world environments. 
-%By leveraging the power of probabilistic inference techniques like the SPA, researchers are making significant strides towards creating more robust and effective path planning systems for a wide range of applications.
-%The probabilistic frame espoused in this work is grounded on Factor Graphs (FG) that represent a unified way of rephrasing directed and undirected probabilistic graphical models in an easy- to- manipulate forward and backward communication propagation (signal inflow). Our work on FG in reduced normal form (FGrn) has further simplified the FG frame reducing the network to interconnections of single-input single-output (SISO) blocks and diverters. Probability consistence can be fluently propagated for conclusion and literacy. Seminal work on FG can be set up in and; some details on the optimized executions of FGrn can be set up in. 
-%
-%
-%\begin{figure}[H]
-%	\includegraphics[width=10.5 cm]{res/FGnr.png}
-%	\caption{Factor graph in normal reduced form}
-%\end{figure}
-%\colorbox{yellow}{Mettere le eq nella forma del paper --Rimuovere array}
-%\begin{equation}
-%	\begin{array}{l}
-%	f_{(S_tA_t)^1}(s_ta_t)=\sum_{s_{t-1}a_{t-1}} p(s_t a_t|s_{t-1} a_{t-1}) 
-%	f_{(S_{t-1}A_{t-1})^3}(s_{t-1}a_{t-1}) ;\\
-%	b_{(S_{t-1}A_{t-1})^3}(s_{t-1}a_{t-1})\propto \sum_{s_t a_t} p(s_t a_t|s_{t-1}a_{t-1}) b_{(S_tA_t)^1}(s_ta_t);\\
-%	 f_{(S_tA_t)^2}(s_ta_t)= c_t(s_ta_t);\\
-%	b_{(S_tA_t)^2}(s_ta_t) \propto b_{(S_tA_t)^3}(s_ta_t) f_{(S_tA_t)^1}(s_ta_t); \\
-%	b_{(S_tA_t)^1}(s_ta_t) \propto f_{(S_tA_t)^2}(s_ta_t) b_{(S_tA_t)^3}(s_ta_t) ;\\
-%	f_{(S_tA_t)^3}(s_ta_t) \propto f_{(S_tA_t)^1}(s_ta_t) f_{(S_tA_t)^2}(s_ta_t).
-%	\end{array}
-%	\label{eq:prop}
-%	\end{equation} 
-%where the simbol $\propto$ means ``proportional to'' because  only some messages are normalized.
-% The posterior distributions of all variables are obtained via the product rule between the forward and backward messages:
-%\begin{equation}
-%p_{(S_tA_t)^i}(s_ta_t) \propto  b_{(S_tA_t)^i}(s_ta_t) f_{(S_tA_t)^i}(s_ta_t), ~~~t=1,...,T; ~~i=1,2,3. 
-%\label{eq:post}
-%\end{equation}
-
-In our work, we consider a discrete environment of size $N\times M$ and the considered agent can move in eight directions: up, down, left, right, and the four diagonal directions.
-Using a discrete representation of the environment, each cell of the grid, that rapresent the possible states of the agent, can be associated with a variable $r_{i,j}$ (Reward), 
-where $i$ and $j$ are the row and column indices of the cell, respectively. The value of $r_{i,j}$ is 1 if the cell is occupied and 0 if the cell is completly free of obstacles or 
-a value between 0 and 1 whereever there is an higher or lower preference to move in that cell. The agent can move from one cell to another only if the destination cell is free.\\
-
-The reward function $r_{i,j}$ is a function of the current state of the environment, and it is assumed to be known to the agent. 
-This function has been obtained by modeling the input dataset and it will be discussed in the next section.\\
+\section{Module}
+The proposed module works on successive steps:
+\begin{itemize}[labelsep=2.5mm,topsep=-3pt]
+	\item \textbf{Input data}: the developed module takes as input several parameters that are used to perform the path planning. 
+	\item \textbf{Path planning}: the path planning is performed by using the developed module. 
+	\item \textbf{Output data}: the developed module provides as output the path planning solution.
+\end{itemize}
 
 \subsection{Input data}
 The developed module takes as input several sets of data divided into:
@@ -249,9 +246,11 @@ The developed module takes as input several sets of data divided into:
 	mission duration, etc.;
 \end{itemize}
 
+\subsubsection{Data for the construction of the parameterized map}
+
 All the weather data are provided by the \colorbox{green}{PARTHENOPE\footnote[2]{http://193.205.230.6:8080/opendap/hyrax/}}. The data are provided in the form of a netCDF file,
 which is a self-describing file format that allows the storage of multidimensional arrays of scientific data and they are used to store both the map and the reward function.
-As input data for the construction of the reward function, the following parameters are considered:
+The data that the module uses are:
 \begin{itemize}
 \item Significant height of wind and swell waves(see figure \ref*{fig:waveHeight}).
 \item Peak direction(see figure \ref*{fig:pDir}).
@@ -316,11 +315,58 @@ to create a smooth transition between the coast and the sea to create different 
 	\end{subfigure}
 \end{figure}
 
-The reward function is obtained by combining the three parameters in a weighted sum and then normalizing the result in the range [0,1].\\
+All those parameters are combinated in a weighted sum and then normalizing the result in the range [0,1].\\
+\begin{equation}
+\label{eq:reward}
+R(s_t) = \sum_{i=1}^n w_i \cdot f_i(s_t)
+\end{equation}
+where $s_t$ is the state at time $t$ and $f_i$ is the $i$-th information gained by the data and $w_i$ is the $i$-th weight.\\
 
-\colorbox{yellow}{TODO}
+\subsubsection{Mission data}
+The mission data are the informations about the mission that the module has to solve. The mission data are:
+\begin{itemize}
+	\item The start position of the agent;
+	\item The goal position of the agent;
+	\item The optional release position of the drone;
+\end{itemize}
+Those informations can be provided by the user or by other DSS module through a MQTT message.\\
+\colorbox{red}{le coordinate devono essere in lat e lon, da scrivere?}
 
 \subsection{Algorithm}
+To run the algorithm, as described previously the module needs the following information:
+\begin{itemize}
+	\item The start position of the agent;
+	\item The goals position of the agent;
+	\item The optional release position of the drone;
+	\item The map of the area;
+	\item The reward function;
+	\item A set of actions that the agent can perform;
+\end{itemize}
+
+The actions that the agent can perform are the following: {move up, move down, move left, move right, move up-left, move up-right, move down-left, move down-right}.\\
+The actions set is obtained through an euristic, thaking in consideration that the action of moving in diagonal is more expensive than the action of moving in a cardinal direction.\\
+A time horizon $T$ is defined to limit the number of iteration of the algorithm (Stop criterion).\\
+A phase of data collection and data processing is performed to obtain the reward function from the user input.\\
+\colorbox{yellow}{Approfondire come si ottiene la reward function}\\
+\colorbox{cyan}{Ricorda che la von mises é stata usata per modellare il fatto che l'agente deve preferire le azioni parallele alla direzione del fronte d'onda per non navigare contro corrente.}
+Once all the data are collected, the computation starts. The cells of the map thet are goals are initialized with a reward of 1, the cells that are not goals are initialized with a reward of 0.
+Using the update rule seen before, the reward of the cells are updated until the cell of the start position is reached (or the stop criterion is reached).\\
+
+\begin{algorithm}
+	\caption{Leader Algorithm}\label{alg:algorithm}
+	\begin{algorithmic}
+	\Require $T > 0$ \Comment{Time horizon}
+	\State $A \gets Action Kernel  $ 
+	\State $Map \gets Input data$
+	\State $Reward \gets Reward update $
+	\While{$ T \neq 0$}
+		\State $Reward \gets Reward update $
+		\State $T \gets T - 1$
+	
+	\EndWhile
+	\end{algorithmic}
+	\end{algorithm}
+
 \colorbox{yellow}{TODO}
 
 \subsection{Communication}
