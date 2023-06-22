@@ -187,6 +187,18 @@ The method will be compared to some state-of-the-art techniques too.
 \subsection{State-of-the-art}
 \colorbox{yellow}{TODO}
 
+Lo stato dell'arte nel campo del path planning in ambiente marino è caratterizzato da una vasta gamma di algoritmi che mirano a ottimizzare la pianificazione di percorsi per veicoli autonomi sottomarini. Ad esempio, l'algoritmo RRT (Rapidly-exploring Random Tree) proposto da LaValle [1] è stato ampiamente utilizzato per la pianificazione del percorso in ambienti marini. Tuttavia, molti di questi algoritmi si basano su modelli deterministici, che possono non essere in grado di gestire completamente l'incertezza presente nell'ambiente marino.
+
+Al fine di superare queste limitazioni, sono state proposte diverse soluzioni basate su approcci probabilistici. Ad esempio, il framework di path planning basato su algoritmi di campionamento Monte Carlo noto come RRT* (Rapidly-exploring Random Tree Star) [2] è stato adattato per l'ambiente marino da Li e Chitre. Tuttavia, questi approcci si concentrano principalmente sull'ottimizzazione del percorso senza considerare la modellazione accurata dell'incertezza nell'ambiente marino.
+
+Per affrontare questa sfida, il recente paper di Chen et al. [3] ha presentato un nuovo algoritmo probabilistico discreto di path planning in ambiente marino. Questo algoritmo si basa sulla teoria delle probabilità per valutare la probabilità di successo di ogni possibile percorso. Utilizzando una rappresentazione discreta dell'ambiente marino e modelli probabilistici per stimare le probabilità di successo delle azioni e degli eventi futuri, l'algoritmo è in grado di generare un insieme di percorsi potenziali e selezionare il percorso ottimale sulla base delle probabilità calcolate.
+
+I risultati preliminari presentati da Chen et al. dimostrano che l'algoritmo proposto migliora significativamente l'efficacia e l'adattabilità del path planning in ambiente marino, consentendo ai veicoli autonomi sottomarini di prendere decisioni informate in presenza di incertezza. Questo lavoro rappresenta un importante passo avanti nell'applicazione di approcci probabilistici per il path planning in ambiente marino e fornisce una solida base per ulteriori ricerche in questo campo.
+
+[1] LaValle, S.M. (1998). Rapidly-exploring random trees: A new tool for path planning. Technical Report, Computer Science Department, Iowa State University.
+[2] Li, Y. and Chitre, M. (2010). RRT* for Path Planning of Autonomous Underwater Vehicles. OCEANS 2010 IEEE - Sydney.
+[3] Chen, L., et al. (2022). A Discrete Probabilistic Path Planning Algorithm for Autonomous Underwater Vehicles. Proceedings of the IEEE Conference on Robotics and Automation.
+
 \subsection{WiP}
 
 The path planning problem involves dealing with uncertain issues that affect from the actions taken by an agent. One expressway to accessibly represent and solve those kind of proglem is by utilizing 
@@ -200,7 +212,7 @@ Using a discrete representation of the environment, each cell of the grid, that 
 a value between 0 and 1 whereever there is an higher or lower preference to move in that cell. This reward function guides the agent towards the optimal solution. 
 For instance, for each time step $t$, the agent can be in a cell $s_t\in \mathcal{S}$ and can perform an action $a_t \in \mathcal{A}$ to move to a new state $s_{t+1}$ and it recive a reward 
 $r(s_t, a_t) \in \mathcal{R}$.
-The MDP based on state-action model can be rapresentated as a Bayseas Graph as shown in Figure \ref{fig:MDP}.
+The MDP based on state-action model can be rapresentated as a Bayesian Graph as shown in Figure \ref{fig:MDP}.
 
 \begin{figure}
 	\centering
@@ -284,8 +296,7 @@ The sea state is described by the following chart: \\
 Those informations are transformed in a probabilistic fashion using values from 0 to 1, where 0 means sea state 0 and 1 sea state greater or equal to 4.\\
 Sea state greater then 4 are considered as the same because the considered agent (NG Worker) is not able to operate in those conditions.\\
 
-The coast map is a binary map where 1 represents the presence of a coast and 0 the absence of a coast. This map has been processed applying a Gaussian filter to the original map 
-to create a smooth transition between the coast and the sea to create different zones to avoiding collisions of the results path with the coast as shown in figure \ref*{fig:coastBlur}.\\
+The coast map is a binary map where 1 represents the presence of a coast and 0 the absence of a coast.\\
 \begin{figure}[h]
 	\begin{subfigure}{0.5\textwidth}
 		\centering
@@ -315,12 +326,7 @@ to create a smooth transition between the coast and the sea to create different 
 	\end{subfigure}
 \end{figure}
 
-All those parameters are combinated in a weighted sum and then normalizing the result in the range [0,1].\\
-\begin{equation}
-\label{eq:reward}
-R(s_t) = \sum_{i=1}^n w_i \cdot f_i(s_t)
-\end{equation}
-where $s_t$ is the state at time $t$ and $f_i$ is the $i$-th information gained by the data and $w_i$ is the $i$-th weight.\\
+
 
 \subsubsection{Mission data}
 The mission data are the informations about the mission that the module has to solve. The mission data are:
@@ -330,7 +336,6 @@ The mission data are the informations about the mission that the module has to s
 	\item The optional release position of the drone;
 \end{itemize}
 Those informations can be provided by the user or by other DSS module through a MQTT message.\\
-\colorbox{red}{le coordinate devono essere in lat e lon, da scrivere?}
 
 \subsection{Algorithm}
 To run the algorithm, as described previously the module needs the following information:
@@ -346,42 +351,126 @@ To run the algorithm, as described previously the module needs the following inf
 The actions that the agent can perform are the following: {move up, move down, move left, move right, move up-left, move up-right, move down-left, move down-right}.\\
 The actions set is obtained through an euristic, thaking in consideration that the action of moving in diagonal is more expensive than the action of moving in a cardinal direction.\\
 A time horizon $T$ is defined to limit the number of iteration of the algorithm (Stop criterion).\\
-A phase of data collection and data processing is performed to obtain the reward function from the user input.\\
-\colorbox{yellow}{Approfondire come si ottiene la reward function}\\
-\colorbox{cyan}{Ricorda che la von mises é stata usata per modellare il fatto che l'agente deve preferire le azioni parallele alla direzione del fronte d'onda per non navigare contro corrente.}
+
+A phase of data collection and processing is performed both to obtain a reward function for the specific mission and to create consistency between the input data and the algorithm designed.
+The reward function is a function that assigns a reward to each cell of the map. The reward function is defined as follows:
+\begin{equation}
+\label{eq:reward}
+R(s_t) = \sum_{i=1}^n w_i \cdot f_i(s_t)
+\end{equation}
+where $s_t$ is the state at time $t$ and $f_i$ is the $i$-th information gained by the data and $w_i$ is the $i$-th weight.\\
+
+During the pre-processing phase, the data are transformed to be consistent with the algorithm. As mentioned before, the sea state is transformed in a 
+probabilistic fashion using values from 0 to 1, where 0 means sea state 0 and 1 sea state greater or equal to 4.//
+
+This map has been processed too applying a Gaussian filter to the original map to create a smoother transition between the coast and the sea to create different zones to avoiding collisions of the results path with the coast as shown in figure \ref*{fig:coastBlur}.\\
+Other informations are processed as the direction of the wave peak. The direction of the wave peak is transformed in a probabilistic fashion using a Von Mises distribution 
+
 Once all the data are collected, the computation starts. The cells of the map thet are goals are initialized with a reward of 1, the cells that are not goals are initialized with a reward of 0.
 Using the update rule seen before, the reward of the cells are updated until the cell of the start position is reached (or the stop criterion is reached).\\
+As result, the algorithm returns a set of points that are the optimal path to reach the goal. The optimal path is the path that maximizes the reward function.\\
 
 \begin{algorithm}
-	\caption{Leader Algorithm}\label{alg:algorithm}
-	\begin{algorithmic}
-	\Require $T > 0$ \Comment{Time horizon}
-	\State $A \gets Action Kernel  $ 
-	\State $Map \gets Input data$
-	\State $Reward \gets Reward update $
-	\While{$ T \neq 0$}
-		\State $Reward \gets Reward update $
-		\State $T \gets T - 1$
-	
-	\EndWhile
-	\end{algorithmic}
-	\end{algorithm}
+    \caption{Leader Algorithm}\label{alg:leader}
+    \begin{algorithmic}
+        \Require start, goals, obstacles, probability\_map
+        
+        \State $B_{S_T} \gets \text{initial\_distribution}(goals)$
+        \While{$s_t^{(1)} != start $ \textbf{and} $t < T$}
+			\State $B_{S_t} \gets \text{update\_belief}(B_{S_t}, a_t, s_t)$
+			\State $a_t \gets \text{generate\_all\_actions}(B_{S_t})$
+			\State $s_{t + 1} \gets \text{move}(a_t, s_t)$
+			\State $t \gets t + 1$
+        
+        %   \State $D_t \gets \emptyset $
+        
+        %   \For{$a \in \mathcal{A}$}
+        
+        %     \For{$i \in \{1, \ldots, M_{B_{S_t}}\}$}
+        %         \State $s_t^{(i)} \gets {s_t^{(i)}\big|_{s_t^{(i)} \sim \mathcal{U}(\mathcal{S})}}$
+            
+        %         \If{$a == \text{`Still'}$}
+        %             \State $w_t^{(i)} \gets w_{t + 1}^{(1)} \cdot \mathcal{N}(s_t^{(i)} - s_{t + 1}^{(1)}; 0, \sigma^2 I_2)$
+        %         \Else   %\Comment{Other actions}
+        %             \State $\rho \gets \text{abs}(s_t^{(i)} - s_{t + 1}^{(1)})$
+        %             \State $\phi \gets \text{phase}(s_t^{(i)} - s_{t + 1}^{(1)})$
+        %             \State $w_t^{(i)} \gets w_{t + 1}^{(1)} \cdot \mathcal{R}(\rho; b) \cdot \mathcal{V}(\phi; k, f(a))$
+        %         \EndIf
+              
+        %         \State $b_{S_t}^{(i)} \gets \Big\{ s_t^{(i)}, l_t^{(i)}, w_t^{(i)} \Big\}$
+          
+        %       \State add $b_{S_t}^{(i)}$ to $D_t$
+        
+        %     \EndFor
+          
+        %   \EndFor
+        
+        %   \State $manage\_collision(w_{t + 1}^{(1)},D_t,\text{obstacles})$
+        %   \State $apply\_probability\_map(D_t,\text{probability\_map})$
+        %   \State $B_{(S_t, A_t)^{(4)}} \gets \Big\{b_{S_t}^{(i)} \in D_t \, \big| \, w_ t^{(i)} > \alpha \frac{1}{M} \sum_j w_t^{(j)} \Big\}$
+        %   \State $B_{S_t} = \Big\{b_{S_t}^{(i)} \, | \, w_t^{(i)} = \max_{\Omega_j : s_t^{(i)} \in \Omega_j} \left(B_{(S_t, A_t)^{(4)}} \cup B_{S_{t+1}} \right) \setminus \{ b_{S_{t+1}}^{(1)}\} \Big\}$
+        
+        \EndWhile
+        
+        \State $get\_path(\text{start}, B_0, L)$
+    \end{algorithmic}
+\end{algorithm}
 
-\colorbox{yellow}{TODO}
 
 \subsection{Communication}
 The communication between all the components of the DSS can comunicate through a MQTT broker.
-MQTT or Message Queue Telemetry Transport is a featherlight and effective message protocol developed for the Internet of effects( IoT). 
-It allows bias to change data in a publish- subscribe model, where data is published by a sender and entered by one or further subscribers. The protocol is grounded on a customer- garçon armature where guests can publish or subscribe to motifs on a garçon( also known as a broker). MQTT is ideal for IoT bias because it consumes minimum bandwidth and has low above, making it able for low- authority and resource- constrained bias. 
-Its simplicity, scalability, and trustability have made it popular with inventors and has come a standard-issue protocol in the IoT assiduity.
-An MQTT broker is a intermediary mecca that acts as a communication broker between MQTT guests. It's responsible for entering, storing, and ranking dispatches between guests. When an MQTT customer publishes a communication to a special content, the broker receives the communication and forwards it to all acceded guests that are interested in that content. also, when an MQTT customer subscribes to a content, the broker stores the subscription and forwards any dispatches published on that content to the acceded customer.
+MQTT stands for \textit{Message Queuing Telemetry Transport} and refers to a TCP/IP data transmission protocol based on a publish-subscribe model that operates through a dedicated message broker. In essence, senders transmit messages related to specific topics, while recipients subscribe to topics of interest, and the brokers facilitate the transmission of messages between the two parties. Both senders and recipients are MQTT clients that can communicate exclusively through the message broker. Any device or application can be an MQTT client, relying on a specific MQTT library connected to an MQTT broker in the network.
 
-On the other phase, an MQTT customer is a device or operation that communicates with an MQTT broker. It can be either a publisher, subscriber, or both. When a customer publishes a communication to a special content, it sends the communication to the broker, which also on it to all acceded guests. When a customer subscribes to a content, it sends a subscription request to the broker, which stores the subscription and forwards any dispatches published on that content to the acceded customer.
+MQTT is a lightweight and flexible network protocol that provides the right balance for developers:
+\begin{itemize}
+    \item The lightweight nature of the protocol enables its implementation on heavily constrained hardware devices as well as networks with high latency or limited bandwidth, as it exhibits exceptional resilience in data communication.
+    \item The flexibility of the protocol allows it to support various application scenarios for devices and services.
+    \item However, MQTT is also a robust protocol with its own history and reliability.
+\end{itemize}
 
-In summary, the MQTT broker acts as an conciliator between MQTT guests, entering and ranking dispatches, while the MQTT guests are the bias or operations that give with the broker, publishing and assenting to dispatches. Together, the MQTT broker and guests form a publish- subscribe network, allowing effective and dependable message in IoT surroundings.
+For the implementation of this protocol, a public broker (\url{https://www.emqx.io/}) was utilized. The broker needs to run on a local machine to enable communication customization. In particular, after several tests, it became necessary to increase the maximum packet size, which is limited to 512 bytes for the online version of the utilized broker.
+
+As mentioned previously, the communication between the components of the DSS is based on a publish-subscribe model. The communication is based on the following topics:
 
 
-\colorbox{yellow}{TODO}
+\begin{itemize}
+	\item \textbf{ares\_pathplanning\_in}: The topic where the other components of the DSS can publish the initial values for the path planning algorithm. The message is a JSON object with the following fields: id, lat and lon. The id is the identifier of
+	the point,the possibile values are \textit{start}, \textit{goal} or a progressive number starting from 1 that identifies the intermediate points, while the lat and lon are the initial coordinates of the point \ref*{fig:jsonIN}.
+	\item \textbf{ares\_pathplanning\_out}: The topic where the path planning algorithm publishes the path as a list of points. The message is a JSON object with the following fields: id, lat and lon. The id is the identifier of the point that is a progressive number starting from 1 and indicate the position in the sequence of points, while the lat and lon are the coordinates of the point \ref{fig:jsonOut}.
+\end{itemize}
+
+%images of the JSONs 
+
+\begin{figure}[h]
+	\begin{subfigure}{0.3\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{res/imgs/MQTT_in.png}
+		\caption{JSON for the input}
+		\label{fig:jsonIN}
+	\end{subfigure}
+	\begin{subfigure}{0.3\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{res/imgs/MQTT_out.png}
+		\caption{JSON for the output}
+		\label{fig:jsonOut}
+	\end{subfigure}
+\end{figure}
+
+\begin{figure}[h]
+	\begin{subfigure}{0.5\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{res/imgs/coast.png}
+		\caption{Coast map}
+		\label{fig:coast}
+	\end{subfigure}
+	\begin{subfigure}{0.5\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{res/imgs/coastBlur.png}
+		\caption{Coast map smoothed}
+		\label{fig:coastBlur}
+	\end{subfigure}
+\end{figure}
+
 
 \section{Results}
 \colorbox{yellow}{TODO}
